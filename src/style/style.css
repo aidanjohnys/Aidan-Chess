@@ -1,7 +1,37 @@
 body {
     font-family: Arial, serif;
+    --light-square: #f0d9b5;
+    --dark-square: #b58863;
+    --square-size: 4em;
 }
 
 header {
     text-align: center;
+}
+
+#chess-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.board-row {
+    display: grid;
+    grid-template-columns: repeat(8, var(--square-size));
+
+}
+
+.square {
+    width: var(--square-size);
+    height: var(--square-size);
+    background-color: var(--light-square);
+}
+
+.board-row:nth-child(2n - 1) > .square:nth-child(2n - 1) {
+    background-color: var(--dark-square);
+}
+
+.board-row:nth-child(2n) > .square:nth-child(2n) {
+    background-color: var(--dark-square);
 }
