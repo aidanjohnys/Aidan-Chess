@@ -2,6 +2,7 @@ body {
     font-family: Arial, serif;
     --light-square: #f0d9b5;
     --dark-square: #b58863;
+    --marker-square: #8e8e8e;
     --square-size: 4em;
 }
 
@@ -18,7 +19,7 @@ header {
 
 .board-row {
     display: grid;
-    grid-template-columns: repeat(8, var(--square-size));
+    grid-template-columns: repeat(9, var(--square-size));
 
 }
 
@@ -28,10 +29,20 @@ header {
     background-color: var(--light-square);
 }
 
-.board-row:nth-child(2n - 1) > .square:nth-child(2n - 1) {
+.marker-square {
+    align-content: center;
+    text-align: center;
+    background-color: var(--marker-square); !important;
+}
+
+.board-row:nth-child(2n - 1) > .square:nth-child(2n - 1):not(.marker-square) {
     background-color: var(--dark-square);
 }
 
 .board-row:nth-child(2n) > .square:nth-child(2n) {
     background-color: var(--dark-square);
+}
+
+.chess-piece img {
+    width: 100%;
 }
