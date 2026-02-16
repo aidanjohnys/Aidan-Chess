@@ -45,4 +45,10 @@ header {
 
 .chess-piece img {
     width: 100%;
+    transition: all 0.2s cubic-bezier(0, 2.7, 0.32, 1.28);
+}
+
+.chess-piece img:hover {
+    cursor: grab;
+    transform: scale(120%);
 }
