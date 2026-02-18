@@ -52,3 +52,7 @@ header {
     cursor: grab;
     transform: scale(120%);
 }
+
+.active-chess-piece {
+    filter: invert();
+}
