@@ -33,6 +33,13 @@ function clickedSquare(event) {
 
     for (const child of event.currentTarget.children) {
         if (child.classList.contains('chess-piece')) {
+            const childIsWhite = child.classList.contains('white');
+            const activePieceIsWhite = chessPiece.classList.contains('white');
+            if (childIsWhite === activePieceIsWhite) {
+                // Not legal move to capture your own piece
+                return;
+            }
+
             child.remove();
         }
     }
