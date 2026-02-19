@@ -54,5 +54,5 @@ header {
 }
 
 .active-chess-piece {
-    filter: invert();
+    filter: drop-shadow(2px 4px 6px black);
 }
