@@ -23,7 +23,7 @@ header {
 
 }
 
-.square {
+.square, .marker-square {
     width: var(--square-size);
     height: var(--square-size);
     background-color: var(--light-square);
@@ -35,7 +35,7 @@ header {
     background-color: var(--marker-square); !important;
 }
 
-.board-row:nth-child(2n - 1) > .square:nth-child(2n - 1):not(.marker-square) {
+.board-row:nth-child(2n - 1) > .square:nth-child(2n - 1) {
     background-color: var(--dark-square);
 }
 

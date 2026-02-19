@@ -1,3 +1,18 @@
+// Generate square IDs eg: C7, D4
+
+const boardSquares = [...document.querySelectorAll('.square')];
+boardSquares.reverse();
+
+for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+        let index = (row * 8) + (col % 8)
+        let colIndex = 7 - col;
+        let colLetter = String.fromCharCode(colIndex + 'A'.charCodeAt(0));
+        let id = `${colLetter}${row + 1}`;
+        boardSquares[index].setAttribute('id', id);
+    }
+}
+
 const chessPieces = document.querySelectorAll('.chess-piece');
 for (const piece of chessPieces) {
     piece.addEventListener('click', clickedChessPiece);
