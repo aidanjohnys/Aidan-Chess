@@ -1,18 +1,9 @@
-// Generate square IDs eg: C7, D4
+import {generate_board} from "./generate_board.js";
 
-const boardSquares = [...document.querySelectorAll('.square')];
-boardSquares.reverse();
+// Programmatically generate the chess board
+const chessPieces = generate_board();
 
-for (let row = 0; row < 8; row++) {
-    for (let col = 0; col < 8; col++) {
-        let index = (row * 8) + (col % 8)
-        let colIndex = 7 - col;
-        let colLetter = String.fromCharCode(colIndex + 'A'.charCodeAt(0));
-        let id = `${colLetter}${row + 1}`;
-        boardSquares[index].setAttribute('id', id);
-    }
-}
-
+/*
 const chessPieces = document.querySelectorAll('.chess-piece');
 for (const piece of chessPieces) {
     piece.addEventListener('click', clickedChessPiece);
@@ -62,3 +53,4 @@ function clickedSquare(event) {
     event.currentTarget.appendChild(chessPiece);
     chessPiece.classList.remove('active-chess-piece');
 }
+*/
