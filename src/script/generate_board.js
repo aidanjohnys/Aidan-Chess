@@ -69,7 +69,7 @@ export function generate_board() {
             const row = rowIndex === 0 ? 7 : 2;
             const position = `${squareLetter}${row}`;
             const square = document.querySelector(`#${position}`);
-            const piece = layout[col];
+            const piece = 'pawn';
 
             const chessPiece = new ChessPiece(color, piece, position)
             chessPiece.element.classList.add('chess-piece', color);
