@@ -3,8 +3,13 @@ body {
     --light-square: #f0d9b5;
     --dark-square: #b58863;
     --marker-square: #8e8e8e;
-    --square-size: 4em;
+    --square-size: 5vw;
+
+    @media (width >= 800px) {
+        --square-size: 4em;
+    }
 }
+
 
 header {
     text-align: center;
@@ -33,6 +38,7 @@ header {
     align-content: center;
     text-align: center;
     background-color: var(--marker-square); !important;
+    font-size: 1em;
 }
 
 .board-row:nth-child(2n - 1) > .square:nth-child(2n - 1) {
