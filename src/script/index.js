@@ -3,24 +3,6 @@ import {generate_board} from "./generate_board.js";
 // Programmatically generate the chess board
 const chessPieces = generate_board();
 
-/*
-const chessPieces = document.querySelectorAll('.chess-piece');
-for (const piece of chessPieces) {
-    piece.addEventListener('click', clickedChessPiece);
-}
-
-function clickedChessPiece(event) {
-    const activeChessPieces = document.querySelectorAll('.active-chess-piece').length;
-
-    if (activeChessPieces < 1) {
-        event.currentTarget.classList.toggle('active-chess-piece');
-    }
-
-    else {
-        event.currentTarget.classList.remove('active-chess-piece')
-    }
-}
-
 const squares = document.querySelectorAll('.square');
 for (const square of squares) {
     square.addEventListener('click', clickedSquare);
@@ -53,4 +35,3 @@ function clickedSquare(event) {
     event.currentTarget.appendChild(chessPiece);
     chessPiece.classList.remove('active-chess-piece');
 }
-*/
