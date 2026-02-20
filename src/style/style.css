@@ -3,7 +3,7 @@ body {
     --light-square: #f0d9b5;
     --dark-square: #b58863;
     --marker-square: #8e8e8e;
-    --square-size: 5vw;
+    --square-size: 10vw;
 
     @media (width >= 800px) {
         --square-size: 4em;
