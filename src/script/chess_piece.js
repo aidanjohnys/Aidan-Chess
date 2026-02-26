@@ -3,21 +3,20 @@ export function ChessPiece (color, type, position) {
         this.type = type;
         this.position = position;
         this.isActive = false;
+        this.isCaptured = false;
 
         this.element = document.createElement('div');
-        this.element.addEventListener('click', this.onClick.bind(this));
 }
 
-ChessPiece.prototype.onClick = function(event) {
-    const activeChessPieces = document.querySelectorAll('.active-chess-piece').length;
+ChessPiece.prototype.updateState = function() {
+    this.element.classList.toggle('active-chess-piece', this.isActive);
 
-    if (activeChessPieces < 1) {
-        event.currentTarget.classList.toggle('active-chess-piece');
-        this.isActive = true;
+    if (this.isCaptured) {
+        this.element.remove();
+        return;
     }
 
-    else {
-        event.currentTarget.classList.remove('active-chess-piece')
-        this.isActive = false;
-    }
+
+    const square = document.querySelector(`#${this.position}`);
+    square.append(this.element);
 }

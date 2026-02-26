@@ -1,7 +1,7 @@
 import {generate_board} from "./generate_board.js";
 
 // Programmatically generate the chess board
-const chessPieces = generate_board();
+let chessPieces = generate_board();
 
 const squares = document.querySelectorAll('.square');
 for (const square of squares) {
@@ -9,29 +9,50 @@ for (const square of squares) {
 }
 
 function clickedSquare(event) {
-    const chessPiece = document.querySelector('.active-chess-piece');
+    const capturedChessPiece = chessPieces.find((element) => element.position === event.currentTarget.id);
+    const activeChessPiece = chessPieces.find((element) => element.isActive === true);
 
-    if (event.currentTarget.contains(chessPiece)) {
+    console.log('captured:', capturedChessPiece);
+    console.log('active:', activeChessPiece);
+
+    // User wants to deactivate a piece
+    if (activeChessPiece === capturedChessPiece) {
+        activeChessPiece.isActive = false;
+        activeChessPiece.updateState();
         return;
     }
 
-    if (chessPiece === null) {
-        return;
-    }
+    // Clicked on an empty square?
+    const isCapturing = capturedChessPiece !== undefined;
 
-    for (const child of event.currentTarget.children) {
-        if (child.classList.contains('chess-piece')) {
-            const childIsWhite = child.classList.contains('white');
-            const activePieceIsWhite = chessPiece.classList.contains('white');
-            if (childIsWhite === activePieceIsWhite) {
-                // Not legal move to capture your own piece
-                return;
-            }
+    // Either a random click or wanting to activate a chess piece
+    if (activeChessPiece === undefined) {
 
-            child.remove();
+        // Ignore random click on the board
+        if (!isCapturing) {
+            return;
         }
+
+        // Activate piece
+        capturedChessPiece.isActive = true;
+        capturedChessPiece.updateState();
+        return;
     }
 
-    event.currentTarget.appendChild(chessPiece);
-    chessPiece.classList.remove('active-chess-piece');
+    if (isCapturing) {
+        // Can't capture your own piece
+        if (capturedChessPiece.color === activeChessPiece.color) {
+            return;
+        }
+
+        // Remove chess piece from board
+        capturedChessPiece.isCaptured = true;
+        capturedChessPiece.updateState();
+        chessPieces = chessPieces.filter(piece => piece !== capturedChessPiece);
+    }
+
+    // Give chess piece a new position
+    activeChessPiece.position = event.currentTarget.id;
+    activeChessPiece.isActive = false;
+    activeChessPiece.updateState();
 }
