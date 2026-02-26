@@ -19,6 +19,7 @@ function clickedSquare(event) {
     if (activeChessPiece === capturedChessPiece) {
         activeChessPiece.isActive = false;
         activeChessPiece.updateState();
+        showLegalMoves([]);
         return;
     }
 
@@ -36,6 +37,7 @@ function clickedSquare(event) {
         // Activate piece
         capturedChessPiece.isActive = true;
         capturedChessPiece.updateState();
+        showLegalMoves(capturedChessPiece.legalMoves);
         return;
     }
 
@@ -55,4 +57,23 @@ function clickedSquare(event) {
     activeChessPiece.position = event.currentTarget.id;
     activeChessPiece.isActive = false;
     activeChessPiece.updateState();
+    showLegalMoves([]);
+}
+
+function showLegalMoves(legalMoves) {
+    const moveMarkers = document.querySelectorAll('.legal-move-marker');
+    moveMarkers.forEach(element => {
+        element.remove()
+    });
+
+    for (const move of legalMoves) {
+        const square = document.querySelector(`#${move}`);
+        const moveMarker = document.createElement('div');
+        moveMarker.classList.add('legal-move-marker');
+        const img = document.createElement('img');
+        img.src = 'asset/legal_move_marker.png';
+        img.alt = 'Legal Move Marker';
+        moveMarker.append(img);
+        square.append(moveMarker);
+    }
 }
