@@ -49,7 +49,7 @@ export function generate_board() {
             const square = document.querySelector(`#${position}`);
             const piece = layout[col];
 
-            const chessPiece = new ChessPiece(color, piece, position)
+            const chessPiece = new ChessPiece(color, piece, position, chessPieces)
             chessPiece.element.classList.add('chess-piece', color);
             square.append(chessPiece.element);
 
@@ -71,7 +71,7 @@ export function generate_board() {
             const square = document.querySelector(`#${position}`);
             const piece = 'pawn';
 
-            const chessPiece = new ChessPiece(color, piece, position)
+            const chessPiece = new ChessPiece(color, piece, position, chessPieces)
             chessPiece.element.classList.add('chess-piece', color);
             square.append(chessPiece.element);
 

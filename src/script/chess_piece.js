@@ -1,4 +1,4 @@
-export function ChessPiece (color, type, position) {
+export function ChessPiece (color, type, position, chessPieces) {
         this.color = color;
         this.type = type;
         this.position = position;
@@ -6,6 +6,7 @@ export function ChessPiece (color, type, position) {
         this.isCaptured = false;
         this.legalMoves = [];
         this.element = document.createElement('div');
+        this.chessPieces = chessPieces;
 }
 
 ChessPiece.prototype.updateState = function() {
@@ -14,7 +15,7 @@ ChessPiece.prototype.updateState = function() {
     if (this.isActive) {
         this.legalMoves = [];
 
-        for (let relativeMove of getLegalMoves(this.type)) {
+        for (let relativeMove of this.getLegalMoves(this.type)) {
             if (this.color === 'black') {
                 // Negate the relative row as black moves in the opposite direction
                 relativeMove[1] = -relativeMove[1];
@@ -35,6 +36,13 @@ ChessPiece.prototype.updateState = function() {
 
             this.legalMoves.push(absoluteMove);
         }
+
+        // Filter out occupied squares
+        const occupiedSquares = [];
+        for (const piece of this.chessPieces) {
+            occupiedSquares.push(piece.position);
+        }
+        this.legalMoves = this.legalMoves.filter(move => !occupiedSquares.includes(move));
     }
 
     if (this.isCaptured) {
@@ -47,16 +55,27 @@ ChessPiece.prototype.updateState = function() {
     square.append(this.element);
 }
 
-function getLegalMoves(piece) {
-    if (piece === 'pawn') {
-        return [[0,1], [0,2]];
+ChessPiece.prototype.getLegalMoves = function() {
+    const pawnRelativeMoves = [[0,1], [0,2]];
+    const knightRelativeMoves = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+
+    if (this.type === 'pawn') {
+        if (this.color === 'Black') {
+            for (let i = 0; i < pawnRelativeMoves.length; i++) {
+                pawnRelativeMoves[i][1] = -pawnRelativeMoves[i][1];
+            }
+        }
     }
 
-    if (piece === 'knight') {
-        return [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+    if (this.type === 'knight') {
+        if (this.color === 'Black') {
+            for (let i = 0; i < knightRelativeMoves.length; i++) {
+                knightRelativeMoves[i][1] = -knightRelativeMoves[i][1];
+            }
+        }
     }
 
-    if (piece === 'bishop') {
+    if (this.type === 'bishop') {
         const moves = [];
         for (let i = 1; i < 8; i++) {
             moves.push([i, i]);
@@ -68,7 +87,7 @@ function getLegalMoves(piece) {
         return moves;
     }
 
-    if (piece === 'queen') {
+    if (this.type === 'queen') {
         const moves = [];
         for (let i = 1; i < 8; i++) {
             moves.push([i, i]);
@@ -84,7 +103,7 @@ function getLegalMoves(piece) {
         return moves;
     }
 
-    if (piece === 'king') {
+    if (this.type === 'king') {
         const moves = [];
         for (let i = 1; i < 2; i++) {
             moves.push([i, i]);
