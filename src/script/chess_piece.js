@@ -56,5 +56,31 @@ function getLegalMoves(piece) {
         return [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
     }
 
-    return [];
+    if (piece === 'bishop') {
+        const moves = [];
+        for (let i = 1; i < 8; i++) {
+            moves.push([i, i]);
+            moves.push([-i, -i]);
+            moves.push([i, -i]);
+            moves.push([-i, i]);
+        }
+
+        return moves;
+    }
+
+    if (piece === 'queen') {
+        const moves = [];
+        for (let i = 1; i < 8; i++) {
+            moves.push([i, i]);
+            moves.push([-i, -i]);
+            moves.push([i, -i]);
+            moves.push([-i, i]);
+            moves.push([0, i]);
+            moves.push([0, -i]);
+            moves.push([i, 0]);
+            moves.push([-i, 0]);
+        }
+
+        return moves;
+    }
 }
