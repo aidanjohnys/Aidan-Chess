@@ -14,15 +14,27 @@ ChessPiece.prototype.updateState = function() {
     if (this.isActive) {
         this.legalMoves = [];
 
-        if (this.type === 'pawn') {
-            const row = parseInt(this.position[1]);
-            let newPos;
-            newPos = this.position[0] + (row + 1).toString();
-            this.legalMoves.push(newPos);
-            newPos = this.position[0] + (row + 2).toString();
-            this.legalMoves.push(newPos);
-        }
+        for (let relativeMove of getLegalMoves(this.type)) {
+            if (this.color === 'black') {
+                // Negate the relative row as black moves in the opposite direction
+                relativeMove[1] = -relativeMove[1];
+            }
 
+            let absoluteMove;
+            const row = String.fromCharCode(this.position[0].charCodeAt(0) + relativeMove[0]);
+            const col = (parseInt(this.position[1]) + relativeMove[1]).toString();
+            absoluteMove = row + col;
+
+            if (row < 'A' || row > 'H') {
+                continue;
+            }
+
+            if (col < 1 || col > 8) {
+                continue;
+            }
+
+            this.legalMoves.push(absoluteMove);
+        }
     }
 
     if (this.isCaptured) {
@@ -33,4 +45,10 @@ ChessPiece.prototype.updateState = function() {
 
     const square = document.querySelector(`#${this.position}`);
     square.append(this.element);
+}
+
+function getLegalMoves(piece) {
+    if (piece === 'pawn') {
+        return [[0,1], [0,2]];
+    }
 }
