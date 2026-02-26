@@ -83,4 +83,20 @@ function getLegalMoves(piece) {
 
         return moves;
     }
+
+    if (piece === 'king') {
+        const moves = [];
+        for (let i = 1; i < 2; i++) {
+            moves.push([i, i]);
+            moves.push([-i, -i]);
+            moves.push([i, -i]);
+            moves.push([-i, i]);
+            moves.push([0, i]);
+            moves.push([0, -i]);
+            moves.push([i, 0]);
+            moves.push([-i, 0]);
+        }
+
+        return moves;
+    }
 }
