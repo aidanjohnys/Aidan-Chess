@@ -51,4 +51,10 @@ function getLegalMoves(piece) {
     if (piece === 'pawn') {
         return [[0,1], [0,2]];
     }
+
+    if (piece === 'knight') {
+        return [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+    }
+
+    return [];
 }
