@@ -27,7 +27,6 @@ ChessPiece.prototype.updateState = function() {
 }
 
 ChessPiece.prototype.updateLegalMoves = function() {
-    const pawnRelativeMoves = [[0,1], [0,2]];
     const knightRelativeMoves = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
     this.legalMoves = [];
 
