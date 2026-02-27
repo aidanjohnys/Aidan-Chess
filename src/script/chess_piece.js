@@ -69,7 +69,7 @@ ChessPiece.prototype.updateLegalMoves = function() {
 
         if (leftCapture !== false) {
             const occupiedSquare = this.getOccupiedSquare(leftCapture);
-            if (occupiedSquare !== null) {
+            if (occupiedSquare !== null && occupiedSquare.color !== this.color) {
                 this.legalMoves.push(leftCapture);
             }
         }
@@ -86,7 +86,7 @@ ChessPiece.prototype.updateLegalMoves = function() {
 
         if (rightCapture !== false) {
             const occupiedSquare = this.getOccupiedSquare(rightCapture);
-            if (occupiedSquare !== null) {
+            if (occupiedSquare !== null && occupiedSquare.color !== this.color) {
                 this.legalMoves.push(rightCapture);
             }
         }
