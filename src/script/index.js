@@ -15,14 +15,6 @@ function clickedSquare(event) {
     console.log('captured:', capturedChessPiece);
     console.log('active:', activeChessPiece);
 
-    // User wants to deactivate a piece
-    if (activeChessPiece === capturedChessPiece) {
-        activeChessPiece.isActive = false;
-        activeChessPiece.updateState();
-        showLegalMoves([]);
-        return;
-    }
-
     // Clicked on an empty square?
     const isCapturing = capturedChessPiece !== undefined;
 
@@ -38,6 +30,14 @@ function clickedSquare(event) {
         capturedChessPiece.isActive = true;
         capturedChessPiece.updateState();
         showLegalMoves(capturedChessPiece.legalMoves);
+        return;
+    }
+
+    // User wants to deactivate a piece
+    if (activeChessPiece === capturedChessPiece) {
+        activeChessPiece.isActive = false;
+        activeChessPiece.updateState();
+        showLegalMoves([]);
         return;
     }
 
