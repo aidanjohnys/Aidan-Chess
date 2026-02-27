@@ -13,36 +13,7 @@ ChessPiece.prototype.updateState = function() {
     this.element.classList.toggle('active-chess-piece', this.isActive);
 
     if (this.isActive) {
-        this.legalMoves = [];
-
-        for (let relativeMove of this.getLegalMoves(this.type)) {
-            if (this.color === 'black') {
-                // Negate the relative row as black moves in the opposite direction
-                relativeMove[1] = -relativeMove[1];
-            }
-
-            let absoluteMove;
-            const row = String.fromCharCode(this.position[0].charCodeAt(0) + relativeMove[0]);
-            const col = (parseInt(this.position[1]) + relativeMove[1]).toString();
-            absoluteMove = row + col;
-
-            if (row < 'A' || row > 'H') {
-                continue;
-            }
-
-            if (col < 1 || col > 8) {
-                continue;
-            }
-
-            this.legalMoves.push(absoluteMove);
-        }
-
-        // Filter out occupied squares
-        const occupiedSquares = [];
-        for (const piece of this.chessPieces) {
-            occupiedSquares.push(piece.position);
-        }
-        this.legalMoves = this.legalMoves.filter(move => !occupiedSquares.includes(move));
+        this.updateLegalMoves();
     }
 
     if (this.isCaptured) {
@@ -55,16 +26,73 @@ ChessPiece.prototype.updateState = function() {
     square.append(this.element);
 }
 
-ChessPiece.prototype.getLegalMoves = function() {
+ChessPiece.prototype.updateLegalMoves = function() {
     const pawnRelativeMoves = [[0,1], [0,2]];
     const knightRelativeMoves = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+    this.legalMoves = [];
 
     if (this.type === 'pawn') {
-        if (this.color === 'Black') {
-            for (let i = 0; i < pawnRelativeMoves.length; i++) {
-                pawnRelativeMoves[i][1] = -pawnRelativeMoves[i][1];
+        // is on starting square? move forward two
+        if (this.position[1] === '2' && this.color === 'white') {
+            this.legalMoves.push(this.getAbsoluteMove([0, 2]));
+        }
+
+        else if (this.position[1] === '7' && this.color === 'black') {
+            this.legalMoves.push(this.getAbsoluteMove([0, -2]));
+        }
+
+        // Move forward 1 square
+        let forwardOne;
+        if (this.color === 'white') {
+            forwardOne = this.getAbsoluteMove([0, 1]);
+        }
+
+        else {
+            forwardOne = this.getAbsoluteMove([0, -1]);
+        }
+
+        if (forwardOne !== false) {
+            const occupiedSquare = this.getOccupiedSquare(forwardOne);
+            if (occupiedSquare === null) {
+                this.legalMoves.push(forwardOne);
             }
         }
+
+        // Left Capture
+        let leftCapture;
+        if (this.color === 'white') {
+            leftCapture = this.getAbsoluteMove([-1, 1])
+        }
+
+        else {
+            leftCapture = this.getAbsoluteMove([-1, -1])
+        }
+
+        if (leftCapture !== false) {
+            const occupiedSquare = this.getOccupiedSquare(leftCapture);
+            if (occupiedSquare !== null) {
+                this.legalMoves.push(leftCapture);
+            }
+        }
+
+        // Right Capture
+        let rightCapture;
+        if (this.color === 'white') {
+            rightCapture = this.getAbsoluteMove([1, 1])
+        }
+
+        else {
+            rightCapture = this.getAbsoluteMove([1, -1])
+        }
+
+        if (rightCapture !== false) {
+            const occupiedSquare = this.getOccupiedSquare(rightCapture);
+            if (occupiedSquare !== null) {
+                this.legalMoves.push(rightCapture);
+            }
+        }
+
+        return;
     }
 
     if (this.type === 'knight') {
@@ -118,4 +146,32 @@ ChessPiece.prototype.getLegalMoves = function() {
 
         return moves;
     }
+}
+
+ChessPiece.prototype.getAbsoluteMove = function(relativeMove) {
+    let absoluteMove;
+    const row = String.fromCharCode(this.position[0].charCodeAt(0) + relativeMove[0]);
+    const col = (parseInt(this.position[1]) + relativeMove[1]).toString();
+    absoluteMove = row + col;
+
+    if (row < 'A' || row > 'H') {
+        return false;
+    }
+
+    if (col < 1 || col > 8) {
+        return false;
+    }
+
+
+    return absoluteMove;
+}
+
+ChessPiece.prototype.getOccupiedSquare = function(position) {
+    for (const piece of this.chessPieces) {
+        if (piece.position === position) {
+            return piece;
+        }
+    }
+
+    return null;
 }
