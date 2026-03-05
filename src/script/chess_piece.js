@@ -27,7 +27,6 @@ ChessPiece.prototype.updateState = function() {
 }
 
 ChessPiece.prototype.updateLegalMoves = function() {
-    const knightRelativeMoves = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
     this.legalMoves = [];
 
     if (this.type === 'pawn') {
@@ -95,55 +94,23 @@ ChessPiece.prototype.updateLegalMoves = function() {
     }
 
     if (this.type === 'knight') {
-        if (this.color === 'Black') {
-            for (let i = 0; i < knightRelativeMoves.length; i++) {
-                knightRelativeMoves[i][1] = -knightRelativeMoves[i][1];
+        const knightRelativeMoves = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+        for (const relativeMove of knightRelativeMoves) {
+            let absoluteMove = this.getAbsoluteMove(relativeMove);
+
+            if (!absoluteMove) {
+                continue;
             }
-        }
-    }
 
-    if (this.type === 'bishop') {
-        const moves = [];
-        for (let i = 1; i < 8; i++) {
-            moves.push([i, i]);
-            moves.push([-i, -i]);
-            moves.push([i, -i]);
-            moves.push([-i, i]);
+            let occupiedSquare = this.getOccupiedSquare(absoluteMove);
+            if (occupiedSquare && occupiedSquare.color === this.color) {
+                continue;
+            }
+
+            this.legalMoves.push(absoluteMove);
         }
 
-        return moves;
-    }
-
-    if (this.type === 'queen') {
-        const moves = [];
-        for (let i = 1; i < 8; i++) {
-            moves.push([i, i]);
-            moves.push([-i, -i]);
-            moves.push([i, -i]);
-            moves.push([-i, i]);
-            moves.push([0, i]);
-            moves.push([0, -i]);
-            moves.push([i, 0]);
-            moves.push([-i, 0]);
-        }
-
-        return moves;
-    }
-
-    if (this.type === 'king') {
-        const moves = [];
-        for (let i = 1; i < 2; i++) {
-            moves.push([i, i]);
-            moves.push([-i, -i]);
-            moves.push([i, -i]);
-            moves.push([-i, i]);
-            moves.push([0, i]);
-            moves.push([0, -i]);
-            moves.push([i, 0]);
-            moves.push([-i, 0]);
-        }
-
-        return moves;
+        return;
     }
 }
 
