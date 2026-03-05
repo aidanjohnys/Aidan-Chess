@@ -32,11 +32,17 @@ ChessPiece.prototype.updateLegalMoves = function() {
     if (this.type === 'pawn') {
         // is on starting square? move forward two
         if (this.position[1] === '2' && this.color === 'white') {
-            this.legalMoves.push(this.getAbsoluteMove([0, 2]));
+            let absoluteMove = this.getAbsoluteMove([0, 2]);
+            if (!this.getOccupiedSquare(absoluteMove)) {
+                this.legalMoves.push(absoluteMove);
+            }
         }
 
         else if (this.position[1] === '7' && this.color === 'black') {
-            this.legalMoves.push(this.getAbsoluteMove([0, -2]));
+            let absoluteMove = this.getAbsoluteMove([0, 2]);
+            if (!this.getOccupiedSquare(absoluteMove)) {
+                this.legalMoves.push(absoluteMove);
+            }
         }
 
         // Move forward 1 square
