@@ -28,6 +28,7 @@ ChessPiece.prototype.updateState = function() {
 
 ChessPiece.prototype.updateLegalMoves = function() {
     this.legalMoves = [];
+    debugger;
 
     if (this.type === 'pawn') {
         // is on starting square? move forward two
@@ -39,7 +40,7 @@ ChessPiece.prototype.updateLegalMoves = function() {
         }
 
         else if (this.position[1] === '7' && this.color === 'black') {
-            let absoluteMove = this.getAbsoluteMove([0, 2]);
+            let absoluteMove = this.getAbsoluteMove([0, -2]);
             if (!this.getOccupiedSquare(absoluteMove)) {
                 this.legalMoves.push(absoluteMove);
             }
