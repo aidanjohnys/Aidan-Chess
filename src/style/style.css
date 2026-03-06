@@ -24,8 +24,7 @@ header {
 
 .board-row {
     display: grid;
-    grid-template-columns: repeat(9, var(--square-size));
-
+    grid-template-columns: repeat(8, var(--square-size));
 }
 
 .square, .marker-square {
@@ -68,6 +67,25 @@ header {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.direction-marker {
+    opacity: 50%;
+    padding: 0.1em;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.direction-marker-row {
+    top: 0;
+}
+
+.direction-marker p {
+    margin: 0;
+    font-weight: bolder;
+    font-size: x-small;
+    color: black;
 }
 
 .legal-move-marker img {

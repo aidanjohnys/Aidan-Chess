@@ -3,21 +3,11 @@ import {ChessPiece} from "./chess_piece.js";
 export function generate_board() {
     const chessBoard = document.querySelector('#chess-board');
 
-    for (let row = 8; row >= 0; row--) {
+    for (let row = 8; row > 0; row--) {
         let boardRow = document.createElement('div');
         boardRow.classList.add('board-row');
         boardRow.id = `row-${row}`;
         chessBoard.append(boardRow);
-
-        if (row === 0) {
-            for (let col = 0; col < 8; col++) {
-                let markerSquare = document.createElement('div');
-                markerSquare.classList.add('marker-square');
-                boardRow.append(markerSquare);
-            }
-
-            continue;
-        }
 
         for (let col = 0; col < 8; col++) {
             let square = document.createElement('div');
@@ -29,11 +19,26 @@ export function generate_board() {
 
             boardRow.append(square);
 
-        }
+            if (col === 0) {
+                let rowMarker = document.createElement('div');
+                rowMarker.classList.add('direction-marker');
+                rowMarker.classList.add('direction-marker-row');
+                let marker = document.createElement('p');
+                marker.textContent = row.toString();
+                rowMarker.append(marker);
+                square.append(rowMarker);
+            }
 
-        let markerSquare = document.createElement('div');
-        markerSquare.classList.add('marker-square');
-        boardRow.append(markerSquare);
+            if (row === 1) {
+                let rowMarker = document.createElement('div');
+                rowMarker.classList.add('direction-marker');
+                rowMarker.classList.add('direction-marker-col');
+                let marker = document.createElement('p');
+                marker.textContent = colLetter;
+                rowMarker.append(marker);
+                square.append(rowMarker);
+            }
+        }
     }
 
     // Setup Chess Board
