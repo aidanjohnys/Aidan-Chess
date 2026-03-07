@@ -11,6 +11,18 @@ body {
     }
 }
 
+main {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+aside {
+    padding: 1em;
+    background-color: #555;
+    border-radius: var(--std-border-radius);
+    color: white;
+}
+
 header {
     display: flex;
     justify-content: center;
@@ -25,6 +37,9 @@ header {
 header h1 {
     margin: 0;
     text-align: center;
+}
+
+#moves {
 }
 
 #chess-board {
