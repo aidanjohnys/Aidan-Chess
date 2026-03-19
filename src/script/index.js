@@ -1,7 +1,7 @@
 import {generate_board} from "./generate_board.js";
 
 // Programmatically generate the chess board
-let chessPieces = generate_board();
+const chessPieces = generate_board();
 
 const squares = document.querySelectorAll('.square');
 for (const square of squares) {
@@ -43,6 +43,7 @@ function clickedSquare(event) {
 
     if (isCapturing) {
         // Can't capture your own piece
+        // todo: might not require this if only legal moves are allowed
         if (capturedChessPiece.color === activeChessPiece.color) {
             return;
         }
@@ -50,7 +51,8 @@ function clickedSquare(event) {
         // Remove chess piece from board
         capturedChessPiece.isCaptured = true;
         capturedChessPiece.updateState();
-        chessPieces = chessPieces.filter(piece => piece !== capturedChessPiece);
+        const index = chessPieces.indexOf(capturedChessPiece);
+        chessPieces.splice(index, 1);
     }
 
     // Give chess piece a new position
