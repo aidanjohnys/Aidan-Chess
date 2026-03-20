@@ -1,3 +1,5 @@
+import {piece_color} from "./game.js";
+
 export function ChessPiece (color, type, position, chessPieces) {
         this.color = color;
         this.type = type;
@@ -9,7 +11,7 @@ export function ChessPiece (color, type, position, chessPieces) {
         this.chessPieces = chessPieces;
 }
 
-const directions = Object.freeze({
+const direction = Object.freeze({
     UP: 0,
     DOWN: 1,
     LEFT: 2,
@@ -21,25 +23,25 @@ const directions = Object.freeze({
 });
 
 const directionRelativeMoveWhite = new Map ([
-    [directions.UP, [0, 1]],
-    [directions.DOWN, [0, -1]],
-    [directions.LEFT, [-1, 0]],
-    [directions.RIGHT, [1, 0]],
-    [directions.UPLEFT, [-1, 1]],
-    [directions.UPRIGHT, [1, 1]],
-    [directions.DOWNLEFT, [-1, -1]],
-    [directions.DOWNRIGHT, [1, -1]]
+    [direction.UP, [0, 1]],
+    [direction.DOWN, [0, -1]],
+    [direction.LEFT, [-1, 0]],
+    [direction.RIGHT, [1, 0]],
+    [direction.UPLEFT, [-1, 1]],
+    [direction.UPRIGHT, [1, 1]],
+    [direction.DOWNLEFT, [-1, -1]],
+    [direction.DOWNRIGHT, [1, -1]]
 ]);
 
 const directionRelativeMoveBlack = new Map ([
-    [directions.UP, [0, -1]],
-    [directions.DOWN, [0, 1]],
-    [directions.LEFT, [1, 0]],
-    [directions.RIGHT, [-1, 0]],
-    [directions.UPLEFT, [1, -1]],
-    [directions.UPRIGHT, [-1, -1]],
-    [directions.DOWNLEFT, [1, 1]],
-    [directions.DOWNRIGHT, [-1, 1]]
+    [direction.UP, [0, -1]],
+    [direction.DOWN, [0, 1]],
+    [direction.LEFT, [1, 0]],
+    [direction.RIGHT, [-1, 0]],
+    [direction.UPLEFT, [1, -1]],
+    [direction.UPRIGHT, [-1, -1]],
+    [direction.DOWNLEFT, [1, 1]],
+    [direction.DOWNRIGHT, [-1, 1]]
 ]);
 
 const MAX_DISTANCE = 7;
@@ -65,17 +67,17 @@ ChessPiece.prototype.updateLegalMoves = function() {
 
     if (this.type === 'pawn') {
         // todo: add en-passant
-        const pushOne = this.getLegalMovesInDirection(directions.UP, 1)[0];
+        const pushOne = this.getLegalMovesInDirection(direction.UP, 1)[0];
         if (pushOne && !this.getOccupiedSquare(pushOne)) {
             this.legalMoves.push(pushOne);
         }
 
         if (isOnStartingSquare(this.position[1], this.color)) {
-            this.legalMoves.push(this.getLegalMovesInDirection(directions.UP, 2)[1]);
+            this.legalMoves.push(this.getLegalMovesInDirection(direction.UP, 2)[1]);
         }
 
         // Left Capture
-        const leftCapture = this.getLegalMovesInDirection(directions.UPLEFT, 1)[0];
+        const leftCapture = this.getLegalMovesInDirection(direction.UPLEFT, 1)[0];
         if (leftCapture) {
             let occupiedSquare = this.getOccupiedSquare(leftCapture);
             if (occupiedSquare && occupiedSquare.color !== this.color) {
@@ -84,7 +86,7 @@ ChessPiece.prototype.updateLegalMoves = function() {
         }
 
         // Right Capture
-        const rightCapture = this.getLegalMovesInDirection(directions.UPRIGHT, 1)[0];
+        const rightCapture = this.getLegalMovesInDirection(direction.UPRIGHT, 1)[0];
         if (rightCapture) {
             let occupiedSquare = this.getOccupiedSquare(rightCapture);
             if (occupiedSquare && occupiedSquare.color !== this.color) {
@@ -113,45 +115,45 @@ ChessPiece.prototype.updateLegalMoves = function() {
 
     else if (this.type === 'bishop') {
         this.legalMoves.push(...[
-            directions.UPLEFT,
-            directions.UPRIGHT,
-            directions.DOWNLEFT,
-            directions.DOWNRIGHT
+            direction.UPLEFT,
+            direction.UPRIGHT,
+            direction.DOWNLEFT,
+            direction.DOWNRIGHT
         ].map((x) => this.getLegalMovesInDirection(x, MAX_DISTANCE)).flat());
     }
 
     else if (this.type === 'rook') {
         this.legalMoves.push(...[
-            directions.UP,
-            directions.DOWN,
-            directions.LEFT,
-            directions.RIGHT
+            direction.UP,
+            direction.DOWN,
+            direction.LEFT,
+            direction.RIGHT
         ].map((x) => this.getLegalMovesInDirection(x, MAX_DISTANCE)).flat());
     }
 
     else if (this.type === 'queen') {
         this.legalMoves.push(...[
-            directions.UP,
-            directions.DOWN,
-            directions.LEFT,
-            directions.RIGHT,
-            directions.UPLEFT,
-            directions.UPRIGHT,
-            directions.DOWNLEFT,
-            directions.DOWNRIGHT
+            direction.UP,
+            direction.DOWN,
+            direction.LEFT,
+            direction.RIGHT,
+            direction.UPLEFT,
+            direction.UPRIGHT,
+            direction.DOWNLEFT,
+            direction.DOWNRIGHT
         ].map((x) => this.getLegalMovesInDirection(x, MAX_DISTANCE)).flat());
     }
 
     else if (this.type === 'king') {
         this.legalMoves.push(...[
-            directions.UP,
-            directions.DOWN,
-            directions.LEFT,
-            directions.RIGHT,
-            directions.UPLEFT,
-            directions.UPRIGHT,
-            directions.DOWNLEFT,
-            directions.DOWNRIGHT
+            direction.UP,
+            direction.DOWN,
+            direction.LEFT,
+            direction.RIGHT,
+            direction.UPLEFT,
+            direction.UPRIGHT,
+            direction.DOWNLEFT,
+            direction.DOWNRIGHT
         ].map((x) => this.getLegalMovesInDirection(x, 1)).flat());
     }
 
@@ -188,7 +190,7 @@ ChessPiece.prototype.getLegalMovesInDirection = function(direction, distance) {
     const moves = [];
 
     let relativeMove;
-    if (this.color === 'white') {
+    if (this.color === piece_color.WHITE) {
         relativeMove = directionRelativeMoveWhite.get(direction);
     }
 

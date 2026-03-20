@@ -1,4 +1,5 @@
 import {ChessPiece} from "./chess_piece.js";
+import {piece_color} from "./game.js";
 
 export function generate_board() {
     const chessBoard = document.querySelector('#chess-board');
@@ -46,7 +47,7 @@ export function generate_board() {
     const chessPieces = [];
 
     // Create Major Pieces
-    ['black', 'white'].forEach((color, rowIndex) => {
+    [piece_color.BLACK, piece_color.WHITE].forEach((color, rowIndex) => {
         for (let col = 0; col < 8; col++) {
             const squareLetter = String.fromCharCode(col + 'A'.charCodeAt(0));
             const row = rowIndex === 0 ? 8 : 1;
@@ -68,7 +69,7 @@ export function generate_board() {
     });
 
     // Create Pawns
-    ['black', 'white'].forEach((color, rowIndex) => {
+    [piece_color.BLACK, piece_color.WHITE].forEach((color, rowIndex) => {
         for (let col = 0; col < 8; col++) {
             const squareLetter = String.fromCharCode(col + 'A'.charCodeAt(0));
             const row = rowIndex === 0 ? 7 : 2;

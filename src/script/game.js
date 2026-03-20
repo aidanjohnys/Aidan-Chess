@@ -3,12 +3,20 @@ import {generate_board} from "./generate_board.js";
 export function Game() {
     // Programmatically generate the chess board
     this.chessPieces = generate_board();
+    this.turn = piece_color.WHITE;
 
     this.squares = document.querySelectorAll('.square');
     for (const square of this.squares) {
         square.addEventListener('click', this.clickedSquare.bind(this));
     }
+
+    this.updateState();
 }
+
+export const piece_color = Object.freeze({
+   WHITE: "white",
+   BLACK: "black",
+});
 
 Game.prototype.clickedSquare = function (event) {
     const capturedChessPiece = this.chessPieces.find((element) => element.position === event.currentTarget.id);
@@ -29,9 +37,12 @@ Game.prototype.clickedSquare = function (event) {
         }
 
         // Activate piece
-        capturedChessPiece.isActive = true;
-        capturedChessPiece.updateState();
-        showLegalMoves(capturedChessPiece.legalMoves);
+        if (capturedChessPiece.color === this.turn) {
+            capturedChessPiece.isActive = true;
+            capturedChessPiece.updateState();
+            showLegalMoves(capturedChessPiece.legalMoves);
+        }
+
         return;
     }
 
@@ -62,6 +73,13 @@ Game.prototype.clickedSquare = function (event) {
     activeChessPiece.isActive = false;
     activeChessPiece.updateState();
     showLegalMoves([]);
+    this.turn = this.turn === piece_color.WHITE ? piece_color.BLACK : piece_color.WHITE;
+    this.updateState();
+}
+
+Game.prototype.updateState = function() {
+    const pieceColorIndicator = document.querySelector("#piece-color-indicator");
+    pieceColorIndicator.textContent = this.turn;
 }
 
 function showLegalMoves(legalMoves) {
