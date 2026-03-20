@@ -22,6 +22,15 @@ const direction = Object.freeze({
     DOWNRIGHT: 7
 });
 
+export const pieceLetter = new Map([
+    ['pawn', ''],
+    ['knight', 'N'],
+    ['bishop', 'B'],
+    ['rook', 'R'],
+    ['queen', 'Q'],
+    ['king', 'K']
+]);
+
 const directionRelativeMoveWhite = new Map ([
     [direction.UP, [0, 1]],
     [direction.DOWN, [0, -1]],

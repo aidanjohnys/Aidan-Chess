@@ -21,6 +21,8 @@ aside {
     background-color: #555;
     border-radius: var(--std-border-radius);
     color: white;
+    height: 20em;
+    overflow-y: auto;
 }
 
 header {
