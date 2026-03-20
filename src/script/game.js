@@ -1,0 +1,83 @@
+import {generate_board} from "./generate_board.js";
+
+export function Game() {
+    // Programmatically generate the chess board
+    this.chessPieces = generate_board();
+
+    this.squares = document.querySelectorAll('.square');
+    for (const square of this.squares) {
+        square.addEventListener('click', this.clickedSquare.bind(this));
+    }
+}
+
+Game.prototype.clickedSquare = function (event) {
+    const capturedChessPiece = this.chessPieces.find((element) => element.position === event.currentTarget.id);
+    const activeChessPiece = this.chessPieces.find((element) => element.isActive === true);
+
+    console.log('captured:', capturedChessPiece);
+    console.log('active:', activeChessPiece);
+
+    // Clicked on an empty square?
+    const isCapturing = capturedChessPiece !== undefined;
+
+    // Either a random click or wanting to activate a chess piece
+    if (activeChessPiece === undefined) {
+
+        // Ignore random click on the board
+        if (!isCapturing) {
+            return;
+        }
+
+        // Activate piece
+        capturedChessPiece.isActive = true;
+        capturedChessPiece.updateState();
+        showLegalMoves(capturedChessPiece.legalMoves);
+        return;
+    }
+
+    // User wants to deactivate a piece
+    if (activeChessPiece === capturedChessPiece) {
+        activeChessPiece.isActive = false;
+        activeChessPiece.updateState();
+        showLegalMoves([]);
+        return;
+    }
+
+    if (isCapturing) {
+        // Can't capture your own piece
+        // todo: might not require this if only legal moves are allowed
+        if (capturedChessPiece.color === activeChessPiece.color) {
+            return;
+        }
+
+        // Remove chess piece from board
+        capturedChessPiece.isCaptured = true;
+        capturedChessPiece.updateState();
+        const index = this.chessPieces.indexOf(capturedChessPiece);
+        this.chessPieces.splice(index, 1);
+    }
+
+    // Give chess piece a new position
+    activeChessPiece.position = event.currentTarget.id;
+    activeChessPiece.isActive = false;
+    activeChessPiece.updateState();
+    showLegalMoves([]);
+}
+
+function showLegalMoves(legalMoves) {
+    const moveMarkers = document.querySelectorAll('.legal-move-marker');
+    moveMarkers.forEach(element => {
+        element.remove()
+    });
+
+    for (const move of legalMoves) {
+        const square = document.querySelector(`#${move}`);
+        const moveMarker = document.createElement('div');
+        moveMarker.classList.add('legal-move-marker');
+        const img = document.createElement('img');
+        img.src = 'asset/legal_move_marker.png';
+        img.alt = 'Legal Move Marker';
+        moveMarker.append(img);
+        square.append(moveMarker);
+    }
+}
