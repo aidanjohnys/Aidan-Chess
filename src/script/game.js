@@ -5,6 +5,7 @@ export function Game() {
     // Programmatically generate the chess board
     this.chessPieces = generate_board();
     this.turn = piece_color.WHITE;
+    this.moves = [];
     this.movesList = document.querySelector("#moves-list");
 
     this.squares = document.querySelectorAll('.square');
@@ -19,6 +20,11 @@ export const piece_color = Object.freeze({
    WHITE: "white",
    BLACK: "black",
 });
+
+function Turn() {
+    this.firstMove = null;
+    this.secondMove = null;
+}
 
 Game.prototype.clickedSquare = function (event) {
     const capturedChessPiece = this.chessPieces.find((element) => element.position === event.currentTarget.id);
@@ -70,8 +76,8 @@ Game.prototype.clickedSquare = function (event) {
         this.chessPieces.splice(index, 1);
     }
 
+    // update position and state
     const oldPosition = activeChessPiece.position;
-    // Give chess piece a new position
     activeChessPiece.position = event.currentTarget.id;
     activeChessPiece.isActive = false;
     activeChessPiece.updateState();
@@ -84,42 +90,34 @@ Game.prototype.clickedSquare = function (event) {
 Game.prototype.updateState = function() {
     const pieceColorIndicator = document.querySelector("#piece-color-indicator");
     pieceColorIndicator.textContent = this.turn;
+
+    const movesList = document.querySelector("#moves-list");
+    movesList.innerHTML = '';
+
+    for (const turn of this.moves) {
+        const listItem = document.createElement("li");
+        const firstMove = document.createElement("span");
+        const secondMove = document.createElement("span");
+        firstMove.textContent = turn.firstMove ?? "";
+        secondMove.textContent = turn.secondMove ?? "";
+        listItem.appendChild(firstMove);
+        listItem.appendChild(secondMove);
+        movesList.append(listItem);
+    }
 }
 
 Game.prototype.updatePlayedMoves = function(piece, isCapturing, oldPosition) {
-    let turn = this.movesList.lastElementChild;
-
     // First move of game
-    if (!turn) {
-        turn = document.createElement("li");
-        this.movesList.append(turn);
+    if (this.moves.length <= 0) {
+        this.moves.push(new Turn());
     }
 
-    let thisMove;
-    const whiteMove = turn.querySelector(".white-move");
-    const blackMove = turn.querySelector(".black-move");
-
-    if (!whiteMove) {
-        thisMove = document.createElement("span");
-        thisMove.classList.add("white-move");
-        turn.append(thisMove);
+    let latestTurn = this.moves[this.moves.length - 1];
+    if (latestTurn.firstMove && latestTurn.secondMove) {
+        this.moves.push(new Turn());
     }
 
-    else if (!blackMove) {
-        thisMove = document.createElement("span");
-        thisMove.classList.add("black-move");
-        turn.append(thisMove);
-    }
-
-    // White and black have already played their turn so make a new move
-    else {
-        turn = document.createElement("li");
-        this.movesList.append(turn);
-        thisMove = document.createElement("span");
-        thisMove.classList.add("white-move");
-        turn.append(thisMove);
-    }
-
+    const turn = this.moves[this.moves.length - 1];
     // Make the first char of the position lowercase so it reads better on the screen
     const position = piece.position.toLowerCase();
     const capturing = isCapturing ? "x" : "";
@@ -129,8 +127,15 @@ Game.prototype.updatePlayedMoves = function(piece, isCapturing, oldPosition) {
         originalFile = oldPosition[0].toLowerCase();
     }
 
-    thisMove.textContent = originalFile + pieceLetter.get(piece.type) + capturing + position + "\u00A0";
-    turn.append(thisMove);
+    const move =  originalFile + pieceLetter.get(piece.type) + capturing + position + "\u00A0";
+
+    if (!turn.firstMove) {
+        turn.firstMove = move;
+    }
+
+    else {
+        turn.secondMove = move;
+    }
 }
 
 function showLegalMoves(legalMoves) {
