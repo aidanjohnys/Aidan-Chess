@@ -98,8 +98,8 @@ Game.prototype.updateState = function() {
         const listItem = document.createElement("li");
         const firstMove = document.createElement("span");
         const secondMove = document.createElement("span");
-        firstMove.textContent = turn.firstMove ?? "";
-        secondMove.textContent = turn.secondMove ?? "";
+        firstMove.textContent = turn.firstMove;
+        secondMove.textContent = turn.secondMove;
         listItem.appendChild(firstMove);
         listItem.appendChild(secondMove);
         movesList.append(listItem);
