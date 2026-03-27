@@ -6,7 +6,6 @@ export function Game() {
     this.chessPieces = generate_board();
     this.turn = piece_color.WHITE;
     this.moves = [];
-    this.movesList = document.querySelector("#moves-list");
 
     this.squares = document.querySelectorAll('.square');
     for (const square of this.squares) {
@@ -81,7 +80,8 @@ Game.prototype.clickedSquare = function (event) {
     activeChessPiece.position = event.currentTarget.id;
     activeChessPiece.isActive = false;
     activeChessPiece.updateState();
-    this.updatePlayedMoves(activeChessPiece, isCapturing, oldPosition);
+    const isCheckingKing = activeChessPiece.isCheckingKing();
+    this.updatePlayedMoves(activeChessPiece, isCapturing, isCheckingKing ,oldPosition);
     showLegalMoves([]);
     this.turn = this.turn === piece_color.WHITE ? piece_color.BLACK : piece_color.WHITE;
     this.updateState();
@@ -106,7 +106,7 @@ Game.prototype.updateState = function() {
     }
 }
 
-Game.prototype.updatePlayedMoves = function(piece, isCapturing, oldPosition) {
+Game.prototype.updatePlayedMoves = function(piece, isCapturing, isCheckingKing, oldPosition) {
     // First move of game
     if (this.moves.length <= 0) {
         this.moves.push(new Turn());
@@ -127,7 +127,13 @@ Game.prototype.updatePlayedMoves = function(piece, isCapturing, oldPosition) {
         originalFile = oldPosition[0].toLowerCase();
     }
 
-    const move =  originalFile + pieceLetter.get(piece.type) + capturing + position + "\u00A0";
+    let checking = "";
+
+    if (isCheckingKing) {
+        checking = "+";
+    }
+
+    const move =  originalFile + pieceLetter.get(piece.type) + capturing + position + checking + "\u00A0" ;
 
     if (!turn.firstMove) {
         turn.firstMove = move;

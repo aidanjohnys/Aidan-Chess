@@ -234,6 +234,22 @@ ChessPiece.prototype.getLegalMovesInDirection = function(direction, distance) {
     return moves;
 }
 
+ChessPiece.prototype.isCheckingKing = function() {
+    this.updateLegalMoves();
+    for (const move of this.legalMoves) {
+        const occupiedSquare = this.getOccupiedSquare(move);
+        if (!occupiedSquare) {
+            continue
+        }
+
+        if (occupiedSquare.type === 'king' && occupiedSquare.color !== this.color) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function isOnStartingSquare(rank, color) {
     if (color === 'black' && rank === '7') {
         return true;
