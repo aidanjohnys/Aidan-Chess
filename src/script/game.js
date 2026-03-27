@@ -77,8 +77,10 @@ Game.prototype.clickedSquare = function (event) {
 
     // update position and state
     const oldPosition = activeChessPiece.position;
+    // consider class variable privacy
     activeChessPiece.position = event.currentTarget.id;
     activeChessPiece.isActive = false;
+    activeChessPiece.hasMovedOnce = true;
     activeChessPiece.updateState();
     const isCheckingKing = activeChessPiece.isCheckingKing();
     this.updatePlayedMoves(activeChessPiece, isCapturing, isCheckingKing ,oldPosition);

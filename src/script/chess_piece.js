@@ -6,6 +6,7 @@ export function ChessPiece (color, type, position, chessPieces) {
         this.position = position;
         this.isActive = false;
         this.isCaptured = false;
+        this.hasMovedOnce = false;
         this.legalMoves = [];
         this.element = document.createElement('div');
         this.chessPieces = chessPieces;
@@ -82,7 +83,10 @@ ChessPiece.prototype.updateLegalMoves = function() {
         }
 
         if (isOnStartingSquare(this.position[1], this.color)) {
-            this.legalMoves.push(this.getLegalMovesInDirection(direction.UP, 2)[1]);
+            const pushTwo = this.getLegalMovesInDirection(direction.UP, 2)[1];
+            if (pushTwo && !this.getOccupiedSquare(pushTwo)) {
+                this.legalMoves.push(pushTwo);
+            }
         }
 
         // Left Capture
@@ -164,6 +168,18 @@ ChessPiece.prototype.updateLegalMoves = function() {
             direction.DOWNLEFT,
             direction.DOWNRIGHT
         ].map((x) => this.getLegalMovesInDirection(x, 1)).flat());
+
+        if (!this.hasMovedOnce) {
+            const leftCastle = this.getLegalMovesInDirection(direction.LEFT, 2)[1];
+            if (leftCastle) {
+                this.legalMoves.push(leftCastle);
+            }
+
+            const rightCastle = this.getLegalMovesInDirection(direction.RIGHT, 2)[1];
+            if (rightCastle) {
+                this.legalMoves.push(rightCastle);
+            }
+        }
     }
 
 }
